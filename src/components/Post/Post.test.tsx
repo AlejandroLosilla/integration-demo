@@ -1,4 +1,4 @@
-import { act, findByText, render, screen } from "@testing-library/react"
+import { act, render, screen } from "@testing-library/react"
 import { BrowserRouter, useParams } from "react-router-dom"
 import { Post } from "./Post"
 import { getPostById } from "../../services/postService"
