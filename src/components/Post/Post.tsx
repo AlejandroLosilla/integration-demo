@@ -13,17 +13,29 @@ export const Post = (): JSX.Element => {
       })()
     }
   }, [id])
+
+  if (!post)
+    return (
+      <div>
+        <h1>Post {id}</h1>
+        <p>Loading...</p>
+        <Link to="/post">Back to Home</Link>
+      </div>
+    )
+
+  if (post.notFound)
+    return (
+      <div>
+        <h1>No results found</h1>
+        <Link to="/post">Back to Home</Link>
+      </div>
+    )
+
   return (
     <div>
       <h1>Post {id}</h1>
-      {!post ? (
-        <p>Loading...</p>
-      ) : (
-        <>
-          <h2>{post.title}</h2>
-          <p>{post.body}</p>
-        </>
-      )}
+      <h2>{post.title}</h2>
+      <p>{post.body}</p>
       <Link to="/post">Back to Home</Link>
     </div>
   )
