@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from "fs";
-import { saveUserPost } from "./userPostService";
+import { getUserPosts, saveUserPost } from "./userPostService";
 import { resolve } from "path";
 
 const mockDb = {
@@ -34,5 +34,17 @@ describe('saveUserPost', () => {
         expect(writeFileSync).toHaveBeenCalledTimes(1)
         expect(writeFileSync).toHaveBeenCalledWith(resolve(process.cwd(), 'src', 'fakeDb.json'), JSON.stringify(expectedJson))
 
+    })
+})
+
+describe('getUserPosts', () => {
+    test('should return user posts in the databse', () => {
+        const result = getUserPosts('userId1')
+        expect(result).toEqual(mockDb['userId1'])
+    })
+    test('should throw an error if userId does not exists in database', () => {
+        // const result = getUserPosts('userId3')
+        // console.log({result})
+        expect(() => getUserPosts('userId3')).toThrowError()
     })
 })

@@ -23,6 +23,11 @@ export async function saveUserPost(userId: string, postId: string) {
     }
 }
 
-export function getUserPosts(userId: string) {
-
+export function getUserPosts(userId: string): UserPost{
+    const json = readFileSync(resolve(process.cwd(), 'src', 'fakeDb.json'), 'utf-8')
+    const jsonObject = JSON.parse(json) as JsonObject
+    if (jsonObject[userId] === undefined) {
+        throw Error('user does not exists')
+    }
+    return jsonObject[userId]
 }
