@@ -1,5 +1,6 @@
-import { readFile, writeFile } from "fs/promises";
+import { readFileSync, writeFileSync } from "fs";
 import { saveUserPost } from "./userPostService";
+import { resolve } from "path";
 
 const mockDb = {
     'userId1': {
@@ -10,10 +11,10 @@ const mockDb = {
     }
 }
 
-jest.mock('fs/promises', () => ({
-    ...jest.requireActual('fs/promises'),
-    writeFile: jest.fn(),
-    readFile: jest.fn(() => Promise.resolve(mockDb))
+jest.mock('fs', () => ({
+    ...jest.requireActual('fs'),
+    writeFileSync: jest.fn(),
+    readFileSync: jest.fn(() => JSON.stringify(mockDb))
 }))
 
 describe('saveUserPost', () => {
@@ -29,9 +30,9 @@ describe('saveUserPost', () => {
 
         await saveUserPost(userId, newPost)
 
-        expect(readFile).toHaveBeenCalledTimes(1)
-        expect(writeFile).toHaveBeenCalledTimes(1)
-        expect(writeFile).toHaveBeenCalledWith('../src/fakeDb.json', JSON.stringify(expectedJson))
+        expect(readFileSync).toHaveBeenCalledTimes(1)
+        expect(writeFileSync).toHaveBeenCalledTimes(1)
+        expect(writeFileSync).toHaveBeenCalledWith(resolve(process.cwd(), 'src', 'fakeDb.json'), JSON.stringify(expectedJson))
 
     })
 })
