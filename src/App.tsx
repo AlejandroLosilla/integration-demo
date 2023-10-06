@@ -4,6 +4,7 @@ import { UserList } from './components/UserList/UserList';
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import { SearchPost } from './components/SearchPost/SearchPost';
 import { Post } from './components/Post/Post';
+import { AddPost } from './components/AddPost/AddPost';
 
 export const App = () => {
   return (
@@ -17,6 +18,7 @@ export const App = () => {
           <Route path="/users" element={<UserList />} />
           <Route path="/post" element={<SearchPost />}/>
           <Route path="/post/:id" element={<Post />}/>
+          <Route path="/add-post" element={<AddPost />}/>
         </Routes>
       </BrowserRouter>
     </div>
