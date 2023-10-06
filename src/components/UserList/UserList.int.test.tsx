@@ -17,7 +17,7 @@ const mockedFetch = {
 global.fetch = jest.fn()
 
 jest.mock("../../services/userService", () => ({
-  getUsers: jest.requireActual("../../services/userService").getUsers,
+  ...jest.requireActual("../../services/userService"),
 }))
 
 describe("UserList integration", () => {
@@ -66,7 +66,12 @@ describe("UserList integration", () => {
   })
 
   describe("filterUser integration", () => {
-    jest.mocked(getUsers as jest.Mock).mockImplementation(() => users)
+    beforeAll(() =>
+      jest.mock("../../services/userService", () => ({
+        getUsers: jest.fn(() => users),
+      }))
+    )
+
     it("should filter users properly", async () => {
       await act(async () => {
         render(<UserList />) as any
@@ -75,6 +80,18 @@ describe("UserList integration", () => {
       fireEvent.change(input, { target: { value: "Pepa juana" } })
 
       expect(screen.getByText("Pepa juana")).toBeInTheDocument()
+    })
+
+    it("should return an empty list if no users are matched", async () => {
+      await act(async () => {
+        render(<UserList />) as any
+      })
+      const input = screen.getByLabelText("Search:")
+      fireEvent.change(input, { target: { value: "usuario" } })
+
+      expect(
+        screen.getByText("No results found for usuario")
+      ).toBeInTheDocument()
     })
   })
 })

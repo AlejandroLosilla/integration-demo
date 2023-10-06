@@ -10,3 +10,11 @@ export const getPostById = async (postId: string): Promise<any> => {
   }
   return data
 };
+
+export const getAllPosts = async (): Promise<any> => {
+  const response = await fetch(
+    `https://jsonplaceholder.typicode.com/posts`
+  );
+
+  return await response.json();
+};

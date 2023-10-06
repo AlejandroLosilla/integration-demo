@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Button } from "../Button/Button"
 import { getUsers } from "../../services/userService"
-import { filterUser } from "../../lib/filterUser"
+import { UserContainer } from "../UserContainer/UserContainer"
 
 export interface User {
   id: string
@@ -17,11 +17,6 @@ export const UserList = () => {
     asyncFunction()
   }, [])
 
-  if (!people) {
-    return null
-  }
-
-  const filteredList = filterUser(filter, people)
   return (
     <>
       <label htmlFor="name-filter">Search:</label>
@@ -31,14 +26,18 @@ export const UserList = () => {
         value={filter}
         onChange={e => setFilter(e.target.value)}
       ></input>
-      <ul>
-        {filteredList.map((person: any) => (
-          <li key={person.id}>{person.name} </li>
-        ))}
-      </ul>
+
+      <UserContainer people={people} filter={filter} />
+
       <Button
         text="Add"
-        onClick={() => setPeople([...people, { id: "20", name: "Other User" }])}
+        onClick={() =>
+          setPeople(prevPeople => [
+            ...(prevPeople as User[]),
+            { id: "20", name: "Other User" },
+          ])
+        }
+        disabled={!people}
       />
     </>
   )
