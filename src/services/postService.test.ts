@@ -6,6 +6,11 @@ const mockedFetch = {
     status: 200,
 };
 
+const mockedFailedFetch = {
+    json: () => Promise.resolve({}),
+    status: 200,
+};
+
 // @ts-ignore
 global.fetch = jest.fn();
 
@@ -21,4 +26,11 @@ describe('getPostById', () => {
         expect(global.fetch).toHaveBeenCalledTimes(1);
         expect(fetchCall).toEqual(mockedSuccessResponse);
     });
+
+    it('should return an object with notFound property if the id is not matched', async () => {
+      (global.fetch as jest.Mock).mockImplementation(() => Promise.resolve(mockedFailedFetch))
+      const fetchedPost = await getPostById('0')
+
+      expect(fetchedPost).toHaveProperty('notFound', true)
+    })
 });

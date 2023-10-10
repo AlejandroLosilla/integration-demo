@@ -2,5 +2,19 @@ export const getPostById = async (postId: string): Promise<any> => {
   const response = await fetch(
     `https://jsonplaceholder.typicode.com/posts/${postId}`
   );
-  return response.json();
+
+  const data = await response.json();
+
+  if (Object.keys(data).length === 0) {
+    return { notFound: true }
+  }
+  return data
+};
+
+export const getAllPosts = async (): Promise<any> => {
+  const response = await fetch(
+    `https://jsonplaceholder.typicode.com/posts`
+  );
+
+  return await response.json();
 };
